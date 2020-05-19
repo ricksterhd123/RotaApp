@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'test.dart';
 import 'package:flutter/material.dart';
 import 'package:english_words/english_words.dart';
 
@@ -17,10 +18,10 @@ class MyApp extends StatelessWidget {
           title: Text('Startup Name Generator'),
         ),
         body: Center(
-          child: RandomWords(),
+          child: Test(),
+          )
         ),
-      ),
-    );
+      );
   }
 }
 
@@ -61,5 +62,28 @@ class RandomWordsState extends State<RandomWords> {
           }
           return _buildRow(_suggestions[index]);
         });
+  }
+}
+
+class MyButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        print('MyButton was tapped!');
+      },
+      child: Container(
+        height: 36.0,
+        padding: const EdgeInsets.all(8.0),
+        margin: const EdgeInsets.symmetric(horizontal: 8.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5.0),
+          color: Colors.lightGreen[500],
+        ),
+        child: Center(
+          child: Text('Engage'),
+        ),
+      ),
+    );
   }
 }
