@@ -1,89 +1,80 @@
-// Copyright 2018 The Flutter team. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
-import 'test.dart';
 import 'package:flutter/material.dart';
-import 'package:english_words/english_words.dart';
 
-void main() => runApp(MyApp());
+/**
+ * House tenant
+ */
+class User {
+  String firstname;
+  String surname;
+  User(firstname, surname) {
+    this.firstname = firstname;
+    this.surname = surname;
+  }
+}
 
-class MyApp extends StatelessWidget {
+User a = new User("Hello", "World");
+User b = new User("Test", "Testing");
+User c = new User("wew", "wew");
+List<User> testUsers = [a, b, c];
+
+/**
+ * Two columns, one for firstname and other for surname - simple.
+ */
+class UserRowWidget extends StatelessWidget {
+  UserRowWidget({Key key, @required this.user}) : super(key: key);
+
+  final User user;
+  @override
+  Widget build(BuildContext context) {
+    return Column(children: [Row(children: [Text("Firstname"), Text("Surname")]), Row(children: [Text(user.firstname), Text(user.surname)])]);
+  }
+}
+
+class UsersColumnWidget extends StatelessWidget {
+  UsersColumnWidget({Key key, @required this.users}) : super(key: key);
+
+  final List<User> users;
+  @override
+  Widget build(BuildContext context) {
+    Map<int, UserRowWidget> mRowWidgets;
+    List<UserRowWidget> rowWidgets = new List<UserRowWidget>();
+    // List<User> -> Map<int, User> -> List<UserRowWidget>
+    this.users.asMap().forEach((key, value){ rowWidgets.add(UserRowWidget(user: value)); });
+    return Column(children: rowWidgets);
+  }
+}
+
+void main() => runApp(RotaApp());
+
+class RotaApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Welcome to Flutter',
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Startup Name Generator'),
-        ),
-        body: Center(
-          child: Test(),
-          )
-        ),
-      );
+      title: 'RotaApp',
+      home: MainScreen(),
+    );
   }
 }
 
-class RandomWords extends StatefulWidget {
-  @override
-  RandomWordsState createState() => RandomWordsState();
-}
-
-class RandomWordsState extends State<RandomWords> {
-  final _suggestions = <WordPair>[];
-  final _biggerFont = const TextStyle(fontSize: 18.0);
-
+/**
+ * Store users here - trying to figure out flutter and dart ... frustrating
+ */
+class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _buildSuggestions(),
-    );
-  }
-
-  Widget _buildRow(WordPair pair) {
-    return ListTile(
-      title: Text(
-        pair.asPascalCase,
-        style: _biggerFont,
+      appBar: AppBar(
+        title: Text('Main menu'),
       ),
+      body: Column(children: [UsersColumnWidget(users: testUsers,),
+            RaisedButton(child: Text("Add users"), onPressed: () {})
+          ])
     );
-  }
-
-  Widget _buildSuggestions() {
-    return ListView.builder(
-        padding: const EdgeInsets.all(16.0),
-        itemBuilder: /*1*/ (context, i) {
-          if (i.isOdd) return Divider(); /*2*/
-
-          final index = i ~/ 2; /*3*/
-          if (index >= _suggestions.length) {
-            _suggestions.addAll(generateWordPairs().take(10)); /*4*/
-          }
-          return _buildRow(_suggestions[index]);
-        });
   }
 }
 
-class MyButton extends StatelessWidget {
+class MainScreen extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        print('MyButton was tapped!');
-      },
-      child: Container(
-        height: 36.0,
-        padding: const EdgeInsets.all(8.0),
-        margin: const EdgeInsets.symmetric(horizontal: 8.0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5.0),
-          color: Colors.lightGreen[500],
-        ),
-        child: Center(
-          child: Text('Engage'),
-        ),
-      ),
-    );
-  }
+  _MainScreenState createState() => _MainScreenState();
 }
+
