@@ -23,13 +23,49 @@ class _MainScreenState extends State<MainScreen> {
 
   }
 
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Add house tenants'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                UserForm(onValidated: this.addUser)
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Save'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           title: Text('Main menu'),
         ),
-        body: Center(child: Flex(direction: Axis.vertical, mainAxisSize: MainAxisSize.min, children: [UsersColumnWidget(users: users), UserForm(onValidated: addUser)]))
+        body: Center(child: Flex(direction: Axis.vertical, mainAxisSize: MainAxisSize.min, children: [UsersColumnWidget(users: this.users)])),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () async {
+            // Add your onPressed code here!
+            var result = await this._showMyDialog();
+
+          },
+          child: Icon(Icons.navigation),
+          backgroundColor: Colors.green,
+        ),
     );
   }
 }

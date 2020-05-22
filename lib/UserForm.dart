@@ -13,7 +13,6 @@ class _FormState extends State<UserForm> {
   final Function onValidated; // Callback: (firstname, surname, err){ ... }
   String fullName;
 
-  String _fullName;
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -46,7 +45,7 @@ class _FormState extends State<UserForm> {
                   this.onValidated.call(this.fullName);
                 }
               },
-              child: Text('Submit'),
+              child: Text('Add user'),
             ),
           ),
         ],
